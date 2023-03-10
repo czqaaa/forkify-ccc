@@ -1,4 +1,3 @@
-import { async } from 'regenerator-runtime';
 import { API_URL, RES_PER_PAGE, KEY } from './config.js';
 import { AJAX } from './helper.js';
 
@@ -44,15 +43,17 @@ export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
     const data = await AJAX(`${API_URL}?search=${query}&Key=${KEY}`);
+    console.log(state.search.results);
     state.search.results = data.data.recipes.map(res => {
       return {
         id: res.id,
         title: res.title,
         publisher: res.publisher,
         image: res.image_url,
-        ...(recipe.key && { key: recipe.key }),
+        ...(res.key && { key: res.key }),
       };
     });
+    // console.log(state.search.results);
     state.search.page = 1;
   } catch (err) {
     throw err;
